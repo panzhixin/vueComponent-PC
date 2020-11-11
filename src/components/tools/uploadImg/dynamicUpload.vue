@@ -94,7 +94,16 @@ export default {
             );
             let formdata = new FormData();
             formdata.append("img", blob, file.name);
-            uploadApi.uploadImg(formdata).then((res) => {
+            // let config = {//监听上传进度
+            //     onUploadProgress: (progressEvent) => {
+            //         var complete =
+            //             (((progressEvent.loaded / progressEvent.total) * 100) |
+            //                 0) +
+            //             "%";
+            //         console.log(complete);
+            //     },
+            // };
+            let upload = uploadApi.uploadImg(formdata).then((res) => {
                 if (res.success) {
                     this.fileList.push(res.data);
                     this.$emit("getFilelist", this.fileList);

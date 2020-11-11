@@ -65,7 +65,7 @@ axios.interceptors.response.use(
     }
 );
 
-export function http(httpDefaultOpts) {
+export function http(httpDefaultOpts, config) {
     if (httpDefaultOpts.data == undefined) {
         httpDefaultOpts.data = {};
     }

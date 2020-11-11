@@ -1,59 +1,104 @@
 <template>
     <div class="page-container">
         <p class="title">组件再封装</p>
+        <el-form label-position="left" :model="form" label-width="80px">
+            <el-collapse v-model="activeNames">
+                <el-collapse-item name="1">
+                    <template slot="title">
+                        <p class="sub-title">1.上传图片</p>
+                    </template>
+                    <p class="third-title">
+                        静态上传（选择文件后进行处理并返回文件本身供父组件使用）
+                    </p>
 
-        <el-collapse v-model="activeNames">
-            <el-collapse-item name="1">
-                <template slot="title">
-                    <p class="sub-title">1.上传图片</p>
-                </template>
-                <p class="third-title">
-                    静态上传（选择文件后进行处理并返回文件本身供父组件使用）
-                </p>
+                    <static-upload
+                        :imgList="form.staticImgs"
+                        :sizeLimit="5"
+                        :length="5"
+                        @getFile="getStaticImgs"
+                    ></static-upload>
 
-                <static-upload
-                    :imgList="staticImgs"
-                    :sizeLimit="5"
-                    :length="5"
-                    @getFile="getStaticImgs"
-                ></static-upload>
+                    <p class="third-title">
+                        动态上传（选择文件后进行处理并自动上传返回url等参数供父组件使用）
+                    </p>
 
-                <p class="third-title">
-                    动态上传（选择文件后进行处理并自动上传返回url等参数供父组件使用）
-                </p>
+                    <dynamic-upload
+                        :fileList="form.dynamicImgs"
+                        :limitNum="5"
+                        :maxSize="5"
+                        @getFilelist="getDynamicImg"
+                    ></dynamic-upload>
+                </el-collapse-item>
+                <el-collapse-item name="2">
+                    <template slot="title">
+                        <p class="sub-title">2.上传文件</p>
+                    </template>
 
-                <dynamic-upload
-                    :fileList="dynamicImgs"
-                    :limitNum="5"
-                    :maxSize="5"
-                    @getFilelist="getDynamicImg"
-                ></dynamic-upload>
-            </el-collapse-item>
-        </el-collapse>
+                    <el-form-item label="上传pdf">
+                        <upload-file
+                            @getFile="getPdf"
+                            acceptType="pdf"
+                        ></upload-file>
+                    </el-form-item>
+
+                    <el-form-item label="上传txt">
+                        <upload-file
+                            @getFile="getTxt"
+                            acceptType="txt"
+                        ></upload-file>
+                    </el-form-item>
+
+                    <el-form-item label="上传excel">
+                        <upload-file
+                            @getFile="getExcel"
+                            acceptType="excel"
+                        ></upload-file>
+                    </el-form-item>
+                </el-collapse-item>
+            </el-collapse>
+        </el-form>
     </div>
 </template>
 
 <script>
 import dynamicUpload from "@/components/tools/uploadImg/dynamicUpload";
 import staticUpload from "@/components/tools/uploadImg/staticUpload";
+import uploadFile from "@/components/tools/uploadFile";
 
 export default {
     data() {
         return {
-            activeNames: ["1"],
-            staticImgs: [],
-            dynamicImgs: [],
+            activeNames: ["1", "2"],
+
+            form: {
+                staticImgs: [],
+                dynamicImgs: [],
+                pdf: null,
+                txt: null,
+                excel: null,
+            },
         };
     },
-    components: { staticUpload, dynamicUpload },
+    components: {
+        staticUpload,
+        dynamicUpload,
+        uploadFile,
+    },
     methods: {
         getStaticImgs(list) {
-            this.staticImgs = list;
-            console.log(this.staticImgs);
+            this.form.staticImgs = list;
         },
         getDynamicImg(list) {
-            this.dynamicImgs = list;
-            console.log(this.dynamicImgs);
+            this.form.dynamicImgs = list;
+        },
+        getPdf(file) {
+            this.form.pdf = file;
+        },
+        getTxt(file) {
+            this.form.txt = file;
+        },
+        getExcel(file) {
+            this.form.excel = file;
         },
     },
 };
