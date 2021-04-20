@@ -14,6 +14,5 @@ export default {
 #app {
     font-size: 12px;
     text-align: left;
-    background: #fff;
 }
 </style>
